@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace AdventOfCode
 {
-    public sealed class Day4 : ResourceLoader
+    public sealed class Day4 : SolverBase
     {
         public IEnumerable<string> RequiredFieldHeaders => new[] {
             "byr",
@@ -19,7 +19,6 @@ namespace AdventOfCode
 
         private readonly Regex _splitter = new Regex("([^\\s]+)\\s", RegexOptions.Compiled);
 
-
         public IEnumerable<IEnumerable<string>> Records => string.Join("\n", LoadRawData())
                 .Split("\n\n")
                 .Select(x => x + " ")
@@ -27,6 +26,15 @@ namespace AdventOfCode
 
         public IEnumerable<IEnumerable<string>> RecordsWithRequiredFields => Records
             .Where(x => !RequiredFieldHeaders.Except(ExtractHeaders(x)).Any());
+
+        protected override object Part1Solution => RecordsWithRequiredFields.Count();
+
+        protected override object Part2Solution => RecordsWithRequiredFields
+            .Select(x => x.All(f => ValidateField(f)))
+            .Where(x => x)
+            .Count();
+
+        protected override int DayNumber => 4;
 
         public bool ValidateField(string field)
         {

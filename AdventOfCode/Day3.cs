@@ -3,8 +3,34 @@ using System.Linq;
 
 namespace AdventOfCode
 {
-    public sealed class Day3 : ResourceLoader
+    public sealed class Day3 : SolverBase
     {
+        private readonly ForestModel _forest;
+        public Day3()
+        {
+            _forest = ForestModel.Parse(LoadRawData());
+        }
+
+        protected override object Part1Solution =>
+            TreeCountForSlope(
+                GenerateSlope(3, 1, _forest.Height),
+                _forest
+            );
+
+        protected override object Part2Solution => Part2Slopes
+            .Select(x => (long)TreeCountForSlope(x, _forest))
+            .Aggregate((a, b) => a * b);
+
+        private IEnumerable<IEnumerable<(int, int)>> Part2Slopes => new[] {
+            GenerateSlope(1, 1, _forest.Height),
+            GenerateSlope(3, 1, _forest.Height),
+            GenerateSlope(5, 1, _forest.Height),
+            GenerateSlope(7, 1, _forest.Height),
+            GenerateSlope(1, 2, _forest.Height),
+        };
+
+        protected override int DayNumber => 3;
+
         public sealed class ForestModel
         {
             private List<List<bool>> _lines;

@@ -3,8 +3,28 @@ using System.Linq;
 
 namespace AdventOfCode
 {
-    public sealed class Day1 : ResourceLoader
+    public sealed class Day1 : SolverBase
     {
+        protected override object Part1Solution => Part1Full();
+
+        protected override object Part2Solution => Part2Full();
+
+        protected override int DayNumber => 1;
+
+        private int Part1Full()
+        {
+            var (a, b) = Part1(LoadIntData());
+
+            return a * b;
+        }
+
+        private int Part2Full()
+        {
+            var (a, b, c) = Part2(LoadIntData());
+
+            return a * b * c;
+        }
+
         public (int, int) Part1(IEnumerable<int> input)
         {
             var indexedInput = input.Select((val, idx) => new { val, idx });

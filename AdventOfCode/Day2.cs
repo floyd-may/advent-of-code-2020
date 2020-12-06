@@ -1,9 +1,24 @@
+using System.Collections.Generic;
 using System.Linq;
 
 namespace AdventOfCode
 {
-    public sealed class Day2 : ResourceLoader
+    public sealed class Day2 : SolverBase
     {
+        protected override object Part1Solution => LoadRecords()
+            .Where(x => x.Part1Valid)
+            .Count();
+
+        protected override object Part2Solution => LoadRecords()
+            .Where(x => x.Part2Valid)
+            .Count();
+
+        protected override int DayNumber => 2;
+
+        private IEnumerable<PasswordRecord> LoadRecords() =>
+            LoadRawData().Select(PasswordRecord.Parse);
+
+
         public sealed class PasswordRecord
         {
             public char RequiredChar { get; set; }
