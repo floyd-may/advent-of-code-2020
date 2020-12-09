@@ -10,7 +10,7 @@ namespace AdventOfCode
         public IEnumerable<string> LoadRawData()
         {
             var type = this.GetType();
-            var resourceName = $"{type.Namespace}.{type.Name}.txt";
+            var resourceName = $"{type.Namespace}.Data.{type.Name}.txt";
             using var stream = type.Assembly.GetManifestResourceStream(resourceName);
             using var rdr = new StreamReader(stream);
 

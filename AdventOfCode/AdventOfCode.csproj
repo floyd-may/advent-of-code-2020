@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="*.txt" />
+    <EmbeddedResource Include="**/*.txt" />
   </ItemGroup>
 
 </Project>
