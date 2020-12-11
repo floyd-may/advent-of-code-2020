@@ -17,6 +17,5 @@ namespace AdventOfCode.Tests
 
             testee.ComputePart2Solution(input, preambleLength: 5).Should().Be(62);
         }
-
     }
 }
