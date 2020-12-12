@@ -34,8 +34,6 @@ namespace AdventOfCode
             .Where(x => x)
             .Count();
 
-        protected override int DayNumber => 4;
-
         public bool ValidateField(string field)
         {
             var parts = field.Split(":");

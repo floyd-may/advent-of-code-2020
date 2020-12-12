@@ -29,8 +29,6 @@ namespace AdventOfCode
             GenerateSlope(1, 2, _forest.Height),
         };
 
-        protected override int DayNumber => 3;
-
         public sealed class ForestModel
         {
             private List<List<bool>> _lines;

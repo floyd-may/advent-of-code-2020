@@ -9,8 +9,6 @@ namespace AdventOfCode
 
         protected override object Part2Solution => Part2Full();
 
-        protected override int DayNumber => 1;
-
         private int Part1Full()
         {
             var (a, b) = Part1(LoadIntData());

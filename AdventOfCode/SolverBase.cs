@@ -62,6 +62,6 @@ namespace AdventOfCode
 
         protected abstract object Part1Solution { get; }
         protected abstract object Part2Solution { get; }
-        protected abstract int DayNumber { get; }
+        protected int DayNumber => int.Parse(this.GetType().Name.Substring(3));
     }
 }

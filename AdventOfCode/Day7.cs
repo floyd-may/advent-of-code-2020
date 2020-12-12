@@ -15,8 +15,6 @@ namespace AdventOfCode
 
         protected override object Part2Solution => _model.RequiredBagsInsideShinyGold;
 
-        protected override int DayNumber => 7;
-
         public sealed class RuleModel
         {
             public sealed class GraphEdge

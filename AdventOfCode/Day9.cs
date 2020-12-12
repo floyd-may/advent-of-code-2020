@@ -9,8 +9,6 @@ namespace AdventOfCode
 
         protected override object Part2Solution => ComputePart2Solution();
 
-        protected override int DayNumber => 9;
-
         public int ComputePart1Solution(int[] data = null, int preambleLength = 25)
         {
             data = data ?? LoadIntData().ToArray();

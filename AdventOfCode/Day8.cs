@@ -10,8 +10,6 @@ namespace AdventOfCode
 
         protected override object Part2Solution => ComputePart2();
 
-        protected override int DayNumber => 8;
-
         public sealed class MachineState
         {
             public int Accumulator { get; private set; }

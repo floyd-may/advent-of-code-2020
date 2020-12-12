@@ -13,8 +13,6 @@ namespace AdventOfCode
             .Where(x => x.Part2Valid)
             .Count();
 
-        protected override int DayNumber => 2;
-
         private IEnumerable<PasswordRecord> LoadRecords() =>
             LoadRawData().Select(PasswordRecord.Parse);
 

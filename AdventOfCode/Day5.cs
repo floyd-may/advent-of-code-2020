@@ -32,7 +32,5 @@ namespace AdventOfCode
                 .Where(x => x.seat > x.expected)
                 .Select(x => x.seat)
                 .First() - 1;
-
-        protected override int DayNumber => 5;
     }
 }

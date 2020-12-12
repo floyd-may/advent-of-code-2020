@@ -40,7 +40,5 @@ namespace AdventOfCode
         protected override object Part2Solution => Groups
             .Select(x => x.Part2Sum)
             .Sum();
-
-        protected override int DayNumber => 6;
     }
 }

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,10 +6,7 @@ namespace AdventOfCode
     public sealed class Day10 : SolverBase
     {
         protected override object Part1Solution => ComputePart1Solution();
-
         protected override object Part2Solution => ComputeFullPart2Solution();
-
-        protected override int DayNumber => 10;
 
         public int ComputePart1Solution(int[] input = null)
         {
