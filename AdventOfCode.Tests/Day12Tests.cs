@@ -63,28 +63,6 @@ namespace AdventOfCode.Tests
                 ( "F64", new Part2State(280, -36, -10, -2) ),
                 ( "R90", new Part2State(280, -36, -2, 10) ),
                 ( "L90", new Part2State(280, -36, -10, -2) ),
-                /*
-                ( "S1", new Part2State() ),
-                ( "E1", new Part2State() ),
-                ( "F11", new Part2State() ),
-                ( "N4", new Part2State() ),
-                ( "R180", new Part2State() ),
-                ( "S3", new Part2State() ),
-                ( "E3", new Part2State() ),
-                ( "F55", new Part2State() ),
-                ( "R90", new Part2State() ),
-                ( "N1", new Part2State() ),
-                ( "E4", new Part2State() ),
-                ( "L180", new Part2State() ),
-                ( "F9", new Part2State() ),
-                ( "N3", new Part2State() ),
-                ( "R90", new Part2State() ),
-                ( "W4", new Part2State() ),
-                ( "N4", new Part2State() ),
-                ( "F36", new Part2State() ),
-                ( "L90", new Part2State() ),
-                ( "F50", new Part2State() ),
-                */
             };
 
             var instructions = instructionsWithExpectedState.Select(x => x.Item1).ToArray();
@@ -100,4 +78,5 @@ namespace AdventOfCode.Tests
             output.Should().BeEquivalentTo(instructionsWithExpectedState);
         }
     }
+
 }
