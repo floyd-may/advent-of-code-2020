@@ -17,6 +17,7 @@ namespace AdventOfCode.Tests
             st.UpdateFrom(Day12.Instruction.Parse("L90")).Dir.Should().Be(Day12.Direction.N);
         }
 
+        [Fact]
         public void Part1Example()
         {
             var instructions = new[] {
@@ -35,6 +36,7 @@ namespace AdventOfCode.Tests
             mhDist.Should().Be(25);
         }
 
+        [Fact]
         public void Part2Example()
         {
             var instructions = new[] {

@@ -142,15 +142,15 @@ namespace AdventOfCode
     }
 
     static class Extensions
+    {
+        public static long NormalizeToDivisor(this long a, long divisor)
         {
-            public static long NormalizeToDivisor(this long a, long divisor)
-            {
-                return ((a % divisor) + divisor) % divisor;
-            }
-
-            public static decimal NormalizeToDivisor(this decimal a, decimal divisor)
-            {
-                return ((a % divisor) + divisor) % divisor;
-            }
+            return ((a % divisor) + divisor) % divisor;
         }
+
+        public static decimal NormalizeToDivisor(this decimal a, decimal divisor)
+        {
+            return ((a % divisor) + divisor) % divisor;
+        }
+    }
 }
