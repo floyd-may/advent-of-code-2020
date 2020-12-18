@@ -27,7 +27,7 @@ namespace AdventOfCode
             return invalidValues.Sum();
         }
 
-        public int ComputePart2(IEnumerable<string> input = null)
+        public long ComputePart2(IEnumerable<string> input = null)
         {
             input = input ?? LoadRawData();
             var parts = string.Join("\n", input).Split("\n\n");
@@ -47,16 +47,67 @@ namespace AdventOfCode
 
             var ticketWidth = validTickets[0].Fields.Count();
 
-            System.Console.WriteLine($"{validTickets.Length} valid tickets...");
-            System.Console.WriteLine($"{rules.Length} rules...");
-            System.Console.WriteLine($"{ticketWidth} fields per tickets...");
+            var allPositions = (1 << ticketWidth) - 1;
 
-            var rulesInOrder = GetRulesInOrder(0, ticketWidth, validTickets, rules);
+            var powersOfTwo = Enumerable.Range(0, ticketWidth)
+                .Select(x => 1 << x)
+                .ToHashSet();
+
+            var ruleOptions = Enumerable
+                .Repeat(allPositions, ticketWidth)
+                .ToArray();
+
+            var found = 0;
+            foreach(var ticket in validTickets)
+            {
+                foreach(var (rule, ruleNo) in rules.Select((r, idx) => (r, idx)))
+                {
+                    var opts = ruleOptions[ruleNo];
+                    if(!powersOfTwo.Contains(opts))
+                    {
+                        opts = opts & ticket.MapRule(rule);
+                    }
+                    ruleOptions[ruleNo] = opts;
+
+                    if(powersOfTwo.Contains(opts))
+                    {
+                        found = found | opts;
+                    }
+                }
+
+                found = ReduceOptions(ruleOptions, found, powersOfTwo);
+            }
+
+            ReduceOptions(ruleOptions, found, powersOfTwo);
+
+            if(ruleOptions.Except(powersOfTwo).Any())
+            {
+                throw new System.Exception("didn't filter them all!");
+            }
+
+            var ruleIndexes = ruleOptions
+                .Select(x => (int)System.Math.Log2(x))
+                .ToArray();
+
+            var rulesInOrder = ruleIndexes
+                .Zip(rules, (idx, rule) => new { idx, rule })
+                .OrderBy(x => x.idx)
+                .ToArray();
+
+            foreach(var (ticket, ticketIdx) in validTickets.Select((x, idx) => (x, idx)))
+            {
+                foreach(var (rule, val) in rulesInOrder.Zip(ticket.Fields, (r, v) => (r, v)))
+                {
+                    if(!rule.rule.Contains(val))
+                    {
+                        throw new System.Exception($"rule {rule.rule.Name} at position {rule.idx} does not match value {val} on ticket {ticketIdx + 1}");
+                    }
+                }
+            }
 
             var departureRuleIndexes = rulesInOrder
-                .Select((rule, ruleIdx) => new { rule, ruleIdx })
                 .Where(x => x.rule.Name.StartsWith("departure"))
-                .Select(x => x.ruleIdx)
+                .Select(x => x.idx)
                 .ToArray();
 
             var departureValues = myTicket.Fields
@@ -65,42 +116,39 @@ namespace AdventOfCode
                 .Select(x => x.val)
                 .ToArray();
 
-            return departureValues.Aggregate(1, (p, v) => p * v);
+            return departureValues.Aggregate(1L, (p, v) => p * v);
         }
 
-        private IEnumerable<Rule> GetRulesInOrder(int pos, int ticketWidth, IEnumerable<Ticket> tickets, IEnumerable<Rule> rules)
+        private int ReduceOptions(int[] ruleOptions, int found, HashSet<int> powersOfTwo)
         {
-            if(pos >= ticketWidth)
+            if(found == 0)
             {
-                return new Rule[0];
+                return 0;
             }
-            var candidates = new List<Rule>();
-            foreach(var rule in rules)
+            var changed = true;
+            while(changed)
             {
-                if(tickets.All(t => rule.Contains(t.Fields[pos])))
+                changed = false;
+                foreach(var (opts, idx) in ruleOptions.Select((x, idx) => (x, idx)))
                 {
-                    candidates.Add(rule);
+                    if(powersOfTwo.Contains(opts))
+                    {
+                        found |= opts;
+                        continue;
+                    }
+
+                    var newOpts = opts & ~found;
+                    changed = changed || opts != newOpts;
+                    ruleOptions[idx] = newOpts;
+
+                    if(powersOfTwo.Contains(newOpts))
+                    {
+                        found |= opts;
+                    }
                 }
             }
 
-            if(pos == 0)
-            {
-                System.Console.WriteLine($"Evaluating {candidates.Count} candidates at position {pos}");
-            }
-
-            foreach(var candidate in candidates)
-            {
-                var nextRules = rules.Where(x => x.Name != candidate.Name).ToArray();
-
-                var nextCandidates = GetRulesInOrder(pos + 1, ticketWidth, tickets, nextRules);
-
-                if(nextCandidates != null)
-                {
-                    return new [] { candidate }.Concat(nextCandidates).ToArray();
-                }
-            }
-
-            return null;
+            return found;
         }
 
         public sealed class Range
@@ -176,6 +224,20 @@ namespace AdventOfCode
             public bool GetIsValid(IEnumerable<Rule> rules)
             {
                 return !GetInvalidValues(rules).Any();
+            }
+
+            public int MapRule(Rule rule)
+            {
+                var agg = 0;
+                foreach(var (field, idx) in Fields.Select((f, i) => (f, i)))
+                {
+                    if(rule.Contains(field))
+                    {
+                        agg |= (1 << idx);
+                    }
+                }
+
+                return agg;
             }
         }
     }

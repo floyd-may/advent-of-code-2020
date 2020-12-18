@@ -49,5 +49,13 @@ namespace AdventOfCode.Tests
 
             testee.ComputePart2(input).Should().Be(156);
         }
+
+        [Fact]
+        public void Part2Actual()
+        {
+            var testee = new Day16();
+
+            testee.ComputePart2().Should().BeGreaterThan(230355299);
+        }
     }
 }
