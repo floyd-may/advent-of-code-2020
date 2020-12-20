@@ -35,38 +35,33 @@ let parsePrefix parse input =
         | [] -> failwith "unexpected eof"
         | x::xs -> failwithf "unexpected char %s" (x |> string)
 
-let rec parseInfix left input =
+let rec parseInfix usePrecedence precedence left input =
     let input = eatWhitespace input
 
     match input with
+    | [] -> (left, input)
     | '+' :: rest ->
-        let (right, rest) = eatWhitespace rest |> parsePrefix beginParse
+        let (right, rest) = eatWhitespace rest |> parsePrefix (doParse usePrecedence precedence)
         let rest = eatWhitespace rest
-        continueParse (Add (left, right)) rest
+        parseInfix usePrecedence 1 (Add (left, right)) rest
     | '*' :: rest ->
-        let (right, rest) = eatWhitespace rest |> parsePrefix beginParse
+        let (right, rest) = eatWhitespace rest |> parsePrefix (doParse usePrecedence precedence)
         let rest = eatWhitespace rest
-        continueParse (Mult (left, right)) rest
+        parseInfix usePrecedence 0 (Mult (left, right)) rest
     | _ -> (left, input)
 
-and continueParse left input =
-    match input with
-    | [] -> (left, [])
-    | _ ->
-        parseInfix left input
+and doParse usePrecedence precedence input =
+    let (left, rest) = parsePrefix (doParse usePrecedence precedence) input
 
-and beginParse input =
-    let (left, rest) = parsePrefix beginParse input
-
-    continueParse left rest
+    parseInfix usePrecedence precedence left rest
 
 let public parse str =
-    let result = beginParse (List.ofSeq str)
+    let result = doParse false 0 (List.ofSeq str)
 
     result |> fst
 
 let public parse2 str =
-    let result = beginParse (List.ofSeq str)
+    let result = doParse true 1 (List.ofSeq str)
 
     result |> fst
 
