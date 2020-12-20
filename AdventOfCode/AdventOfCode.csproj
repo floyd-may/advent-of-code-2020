@@ -9,4 +9,8 @@
     <EmbeddedResource Include="Data/*.txt" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\AdventOfCode.Fs\AdventOfCode.Fs.fsproj" />
+  </ItemGroup>
+
 </Project>
