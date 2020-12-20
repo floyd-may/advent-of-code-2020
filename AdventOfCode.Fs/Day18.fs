@@ -41,13 +41,15 @@ let rec parseInfix usePrecedence precedence left input =
     match input with
     | [] -> (left, input)
     | '+' :: rest ->
-        let (right, rest) = eatWhitespace rest |> parsePrefix (doParse usePrecedence precedence)
-        let rest = eatWhitespace rest
+        let (right, rest) = parsePrefix (doParse usePrecedence 1) rest
         parseInfix usePrecedence 1 (Add (left, right)) rest
     | '*' :: rest ->
-        let (right, rest) = eatWhitespace rest |> parsePrefix (doParse usePrecedence precedence)
-        let rest = eatWhitespace rest
-        parseInfix usePrecedence 0 (Mult (left, right)) rest
+        let (right, rest) = parsePrefix (doParse usePrecedence precedence) rest
+        if usePrecedence && precedence = 1 then
+            let (right, rest) = parseInfix usePrecedence 0 right rest
+            (Mult (left, right), rest)
+        else
+            parseInfix usePrecedence 0 (Mult (left, right)) rest
     | _ -> (left, input)
 
 and doParse usePrecedence precedence input =
