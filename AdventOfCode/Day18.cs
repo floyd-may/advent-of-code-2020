@@ -8,6 +8,8 @@ namespace AdventOfCode
             .Select(x => (long)AdventOfCode.Fs.Day18.computePart1(x))
             .Sum();
 
-        protected override object Part2Solution => null;
+        protected override object Part2Solution => LoadRawData()
+            .Select(x => (long)AdventOfCode.Fs.Day18.computePart2(x))
+            .Sum();
     }
 }
