@@ -128,7 +128,7 @@ Tile 2311:
 ..###..###
 *)
 
-let tiles = parseTiles sampleInput
+let tiles = Parsing.parseTiles sampleInput
 let sampleTile = List.head tiles
 
 [<Fact>]
@@ -151,7 +151,7 @@ let ``parses tile``() =
 
 [<Fact>]
 let ``gets edges``() =
-    let result = getEdges sampleTile
+    let result = Tile.getEdges sampleTile
 
     result |> should equal (Set.ofList [
         "..##.#..#.";
@@ -169,3 +169,9 @@ let ``computes part 1 solution``() =
     let result = getPart1Solution sampleInput
 
     result |> should equal 20899048083289L
+
+[<Fact>]
+let ``computes part 2 solution``() =
+    let result = getPart2Solution sampleInput
+
+    result |> should equal 273
