@@ -5,7 +5,7 @@ namespace AdventOfCode
         protected override object Part1Solution =>
             AdventOfCode.Fs.Day21.getPart1Solution(LoadRawData());
 
-        protected override object Part2Solution => null;
-            //AdventOfCode.Fs.Day21.getPart2Solution(LoadRawData());
+        protected override object Part2Solution =>
+            AdventOfCode.Fs.Day21.getPart2Solution(LoadRawData());
     }
 }
