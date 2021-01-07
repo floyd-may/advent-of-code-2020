@@ -11,9 +11,12 @@
     <Compile Include="Day20Tests.fs" />
     <Compile Include="Day21.fs" />
     <Compile Include="Day21Tests.fs" />
+    <Compile Include="Day22.fs" />
+    <Compile Include="Day22Tests.fs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FParsec" Version="1.1.1" />
+    <PackageReference Include="FSharpx.Collections" Version="2.1.3" />
     <PackageReference Include="FsUnit.Xunit" Version="4.0.2" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
