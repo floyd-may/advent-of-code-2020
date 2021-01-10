@@ -4,16 +4,10 @@ open Xunit
 open FsUnit.Xunit
 open Day22
 open Day22.Part1
-
-open FSharpx.Collections
-
-let q l =
-    l
-    //|> Seq.rev
-    |> Queue.ofSeq
+open AdventOfCode.Queues
 
 let toState l1 l2 =
-    State.unitState (q l1) (q l2)
+    State.unitState (MapQueue.ofSeq l1) (MapQueue.ofSeq l2)
 
 [<Fact>]
 let ``war with p1 winner``() =
@@ -75,9 +69,27 @@ let ``parse sample input``() =
 
     actual |> should equal expected
 
-let ``part 2 solution``() =
+[<Fact>]
+let ``part 2 solution exampl``() =
     let expected = 291
 
     let actual = getPart2Solution sampleInput
 
     actual |> should equal expected
+
+[<Fact(Skip="perf issue")>]
+let ``actual part 2 solution``() =
+    let input1 = MapQueue.ofSeq [
+        30;42;25;7;29;1;16;50;11;40;4;41;3;12;8;20;32;38;31;2;44;28;33;18;10
+        ]
+    let input2 = MapQueue.ofSeq [
+        36;13;46;15;27;45;5;19;39;24;14;9;17;22;37;47;43;21;6;35;23;48;34;26;49
+    ]
+
+    let state = State.create input1 input2 Set.empty
+
+    let finalState = Part2.playGame state
+
+    let score = finalState
+
+    score |> should not' (equal 33759)

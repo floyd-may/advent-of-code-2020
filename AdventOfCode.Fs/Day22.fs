@@ -1,9 +1,10 @@
 module AdventOfCode.Fs.Day22
-open FSharpx.Collections
+
+open AdventOfCode.Queues
 
 type State<'A> = {
-    Player1: int Queue
-    Player2: int Queue
+    Player1: int MapQueue
+    Player2: int MapQueue
     UserState: 'A
 }
 
@@ -28,13 +29,13 @@ module State =
 
     let p1win state = {
         state with
-            Player1 = state.Player1.Tail.Conj(state.Player1.Head).Conj(state.Player2.Head);
+            Player1 = MapQueue.pushMany [state.Player1.Head; state.Player2.Head] state.Player1.Tail
             Player2 = state.Player2.Tail;
     }
     let p2win state = {
         state with
             Player1 = state.Player1.Tail;
-            Player2 = state.Player2.Tail.Conj(state.Player2.Head).Conj(state.Player1.Head);
+            Player2 = MapQueue.pushMany [state.Player2.Head; state.Player1.Head] state.Player2.Tail
     }
 
 module Part1 =
@@ -58,7 +59,7 @@ module Part1 =
         playGameToWinner newState
 
 module Part2 =
-    let shouldRecursePlayer (deck: int Queue) =
+    let shouldRecursePlayer (deck: int MapQueue) =
         let length = deck.Length
         if length = 0
         then false
@@ -71,7 +72,7 @@ module Part2 =
             &&
             shouldRecursePlayer state.Player2
 
-    let serializePlayer p =
+    let serializePlayer (p:MapQueue<int>) =
         Seq.map string p
         |> String.concat ","
 
@@ -86,36 +87,36 @@ module Part2 =
     let p1win state = {
         (State.p1win state) with
             UserState =
-                Set.add (serialize state) state.UserState
+                Set.add (toPrevGame state) state.UserState
     }
     let p2win state = {
         (State.p2win state) with
             UserState =
-                Set.add (serialize state) state.UserState
+                Set.add (toPrevGame state) state.UserState
     }
 
     let takeNtail n q =
         Seq.take n q
-        |> Queue.ofSeq
-
+        |> MapQueue.ofSeq
 
     let printState st =
         let games = st.UserState |> Set.count
-        if games % 8000 = 0 && ((games = 0) |> not)
+        if games > 4000
         then printfn "(%i) %s" games (serialize st)
-        else ()
 
     let rec playGame state =
-        do printState state
         let winner = State.getWinner state
         if winner.IsSome then state else
-        if state.UserState |> (Set.contains (serialize state))
+        let prevGame = toPrevGame state
+        if state.UserState |> (Set.contains prevGame)
         then p1win state |> playGame
         else
         let optSubgameResult = tryRecurse state
         if optSubgameResult |> Option.isSome
         then
+            do printState state
             let subgameResult = optSubgameResult.Value
+            do printState subgameResult
             match State.getWinner subgameResult with
             | Some Player1 -> p1win state |> playGame
             | Some Player2 -> p2win state |> playGame
@@ -138,7 +139,8 @@ let scoreGame state =
         if state.Player1.IsEmpty
         then state.Player2
         else state.Player1
-    winner.Rev()
+    winner
+    |> Seq.rev
     |> Seq.indexed
     |> Seq.map (fun (idx, card) -> (idx + 1) * card)
     |> Seq.sum
@@ -152,7 +154,7 @@ let parseGame input =
         player.Split("\n")
         |> Seq.tail
         |> Seq.map int
-        |> Queue.ofSeq
+        |> MapQueue.ofSeq
 
     {
         Player1 = parsePlayer playerParts.[0];

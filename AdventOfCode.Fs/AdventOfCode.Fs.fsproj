@@ -3,6 +3,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Queue.fs" />
+    <Compile Include="QueueTests.fs" />
     <Compile Include="Day18.fs" />
     <Compile Include="Day18Tests.fs" />
     <Compile Include="Day19.fs" />
@@ -13,10 +15,11 @@
     <Compile Include="Day21Tests.fs" />
     <Compile Include="Day22.fs" />
     <Compile Include="Day22Tests.fs" />
+    <Compile Include="Day23.fs" />
+    <Compile Include="Day23Tests.fs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FParsec" Version="1.1.1" />
-    <PackageReference Include="FSharpx.Collections" Version="2.1.3" />
     <PackageReference Include="FsUnit.Xunit" Version="4.0.2" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
